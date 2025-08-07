@@ -35,7 +35,7 @@ interface TaskSubmission {
   status: string;
   submitted_by: string;
   submitted_at: string;
-  attachments: any[];
+  attachments: any;
 }
 
 export default function Tasks() {
@@ -99,17 +99,17 @@ export default function Tasks() {
   const createTask = async () => {
     if (!newTask.title || !user) return;
 
-    const { error } = await supabase
-      .from('tasks')
-      .insert({
-        title: newTask.title,
-        description: newTask.description,
-        department: newTask.department || null,
-        deadline: newTask.deadline?.toISOString() || null,
-        assigned_to: newTask.assigned_to,
-        creative_followup: newTask.creative_followup,
-        created_by: user.id
-      });
+      const { error } = await supabase
+        .from('tasks')
+        .insert({
+          title: newTask.title,
+          description: newTask.description,
+          department: (newTask.department as any) || 'IT',
+          deadline: newTask.deadline?.toISOString() || null,
+          assigned_to: newTask.assigned_to,
+          creative_followup: newTask.creative_followup,
+          created_by: user.id
+        });
 
     if (error) {
       toast({ title: 'Error', description: 'Failed to create task', variant: 'destructive' });

@@ -48,7 +48,7 @@ export default function Analytics() {
 
       // Fetch task stats
       const { data: tasks } = await supabase.from('tasks').select('status');
-      const completedTasks = tasks?.filter(t => t.status === 'completed').length || 0;
+      const completedTasks = tasks?.filter(t => t.status === 'approved').length || 0;
       const pendingTasks = tasks?.filter(t => t.status === 'pending').length || 0;
 
       // Fetch event stats
@@ -64,18 +64,23 @@ export default function Analytics() {
 
       // Department stats
       const departmentStats = [
-        { name: 'Organizing Committee', value: users?.filter(u => u.department === 'organizing_committee').length || 0 },
-        { name: 'Production', value: users?.filter(u => u.department === 'production').length || 0 },
-        { name: 'Marketing', value: users?.filter(u => u.department === 'marketing').length || 0 },
-        { name: 'Logistics', value: users?.filter(u => u.department === 'logistics').length || 0 },
-        { name: 'Speakers', value: users?.filter(u => u.department === 'speakers').length || 0 }
+        { name: 'IT', value: users?.filter(u => u.department === 'IT').length || 0 },
+        { name: 'Organizing', value: users?.filter(u => u.department === 'Organizing').length || 0 },
+        { name: 'Graphic Design', value: users?.filter(u => u.department === 'Graphic Design').length || 0 },
+        { name: 'Public Relations', value: users?.filter(u => u.department === 'Public Relations').length || 0 },
+        { name: 'Treasury', value: users?.filter(u => u.department === 'Treasury').length || 0 },
+        { name: 'Marketing & Social Media', value: users?.filter(u => u.department === 'Marketing & Social Media').length || 0 },
+        { name: 'Content Writing', value: users?.filter(u => u.department === 'Content Writing').length || 0 },
+        { name: 'HR', value: users?.filter(u => u.department === 'HR').length || 0 }
       ].filter(dept => dept.value > 0);
 
       // Task status data
       const taskStatusData = [
-        { name: 'Completed', value: completedTasks, color: '#10b981' },
-        { name: 'In Progress', value: tasks?.filter(t => t.status === 'in_progress').length || 0, color: '#f59e0b' },
-        { name: 'Pending', value: pendingTasks, color: '#6b7280' }
+        { name: 'Approved', value: completedTasks, color: '#10b981' },
+        { name: 'In Review', value: tasks?.filter(t => t.status === 'in_review').length || 0, color: '#f59e0b' },
+        { name: 'Pending', value: pendingTasks, color: '#6b7280' },
+        { name: 'Submitted', value: tasks?.filter(t => t.status === 'submitted').length || 0, color: '#3b82f6' },
+        { name: 'Rejected', value: tasks?.filter(t => t.status === 'rejected').length || 0, color: '#ef4444' }
       ];
 
       // Monthly activity (mock data for demonstration)

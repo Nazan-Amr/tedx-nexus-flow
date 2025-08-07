@@ -62,15 +62,15 @@ export default function Reports() {
   const createReport = async () => {
     if (!newReport.title || !user) return;
 
-    const { error } = await supabase
-      .from('reports')
-      .insert({
-        title: newReport.title,
-        description: newReport.description,
-        type: newReport.type,
-        deadline: newReport.deadline?.toISOString() || null,
-        submitted_by: user.id
-      });
+      const { error } = await supabase
+        .from('reports')
+        .insert({
+          title: newReport.title,
+          description: newReport.description,
+          type: newReport.type as 'event_updates' | 'financials' | 'weekly_progress' | 'other',
+          deadline: newReport.deadline?.toISOString() || null,
+          submitted_by: user.id
+        });
 
     if (error) {
       toast({ title: 'Error', description: 'Failed to create report', variant: 'destructive' });
@@ -156,9 +156,10 @@ export default function Reports() {
                       <SelectValue placeholder="Select report type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="financial">Financial</SelectItem>
-                      <SelectItem value="activity">Activity</SelectItem>
-                      <SelectItem value="progress">Progress</SelectItem>
+                      <SelectItem value="event_updates">Event Updates</SelectItem>
+                      <SelectItem value="financials">Financials</SelectItem>
+                      <SelectItem value="weekly_progress">Weekly Progress</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

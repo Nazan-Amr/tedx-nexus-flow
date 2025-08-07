@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ExternalLink, Plus, Tool, Edit, Trash2 } from 'lucide-react';
+import { ExternalLink, Plus, Settings, Edit, Trash2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 interface ToolItem {
@@ -61,16 +61,15 @@ export default function Tools() {
   const createTool = async () => {
     if (!toolForm.name || !toolForm.url || !user) return;
 
-    const { error } = await supabase
-      .from('tools')
-      .insert({
-        name: toolForm.name,
-        description: toolForm.description,
-        url: toolForm.url,
-        icon: toolForm.icon || 'Tool',
-        required_role: toolForm.required_role,
-        department: toolForm.department || null
-      });
+        const { error } = await supabase
+          .from('tools')
+          .insert({
+            name: toolForm.name,
+            description: toolForm.description,
+            url: toolForm.url,
+            required_role: (toolForm.required_role as any) || 'member',
+            department: (toolForm.department as any) || 'IT'
+          });
 
     if (error) {
       toast({ title: 'Error', description: 'Failed to create tool', variant: 'destructive' });
@@ -85,17 +84,16 @@ export default function Tools() {
   const updateTool = async () => {
     if (!selectedTool || !toolForm.name || !toolForm.url) return;
 
-    const { error } = await supabase
-      .from('tools')
-      .update({
-        name: toolForm.name,
-        description: toolForm.description,
-        url: toolForm.url,
-        icon: toolForm.icon || 'Tool',
-        required_role: toolForm.required_role,
-        department: toolForm.department || null
-      })
-      .eq('id', selectedTool.id);
+        const { error } = await supabase
+          .from('tools')
+          .update({
+            name: toolForm.name,
+            description: toolForm.description,
+            url: toolForm.url,
+            required_role: (toolForm.required_role as any) || 'member',
+            department: (toolForm.department as any) || 'IT'
+          })
+          .eq('id', selectedTool.id);
 
     if (error) {
       toast({ title: 'Error', description: 'Failed to update tool', variant: 'destructive' });
@@ -243,11 +241,14 @@ export default function Tools() {
                       <SelectValue placeholder="Select department" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="organizing_committee">Organizing Committee</SelectItem>
-                      <SelectItem value="production">Production</SelectItem>
-                      <SelectItem value="marketing">Marketing</SelectItem>
-                      <SelectItem value="logistics">Logistics</SelectItem>
-                      <SelectItem value="speakers">Speakers</SelectItem>
+                      <SelectItem value="IT">IT</SelectItem>
+                      <SelectItem value="Organizing">Organizing</SelectItem>
+                      <SelectItem value="Graphic Design">Graphic Design</SelectItem>
+                      <SelectItem value="Public Relations">Public Relations</SelectItem>
+                      <SelectItem value="Treasury">Treasury</SelectItem>
+                      <SelectItem value="Marketing & Social Media">Marketing & Social Media</SelectItem>
+                      <SelectItem value="Content Writing">Content Writing</SelectItem>
+                      <SelectItem value="HR">HR</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -264,7 +265,7 @@ export default function Tools() {
             <CardHeader>
               <div className="flex justify-between items-start">
                 <div className="flex items-start gap-3">
-                  <Tool className="w-5 h-5 text-primary mt-1" />
+                  <Settings className="w-5 h-5 text-primary mt-1" />
                   <div>
                     <CardTitle className="text-foreground">{tool.name}</CardTitle>
                     {tool.description && (
@@ -321,7 +322,7 @@ export default function Tools() {
       {tools.length === 0 && (
         <Card className="border-border">
           <CardContent className="text-center py-8">
-            <Tool className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <Settings className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-foreground mb-2">No tools available</h3>
             <p className="text-muted-foreground">
               {canManageTools ? 'Add your first tool to get started.' : 'No tools have been added yet.'}
@@ -384,11 +385,14 @@ export default function Tools() {
                   <SelectValue placeholder="Select department" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="organizing_committee">Organizing Committee</SelectItem>
-                  <SelectItem value="production">Production</SelectItem>
-                  <SelectItem value="marketing">Marketing</SelectItem>
-                  <SelectItem value="logistics">Logistics</SelectItem>
-                  <SelectItem value="speakers">Speakers</SelectItem>
+                      <SelectItem value="IT">IT</SelectItem>
+                      <SelectItem value="Organizing">Organizing</SelectItem>
+                      <SelectItem value="Graphic Design">Graphic Design</SelectItem>
+                      <SelectItem value="Public Relations">Public Relations</SelectItem>
+                      <SelectItem value="Treasury">Treasury</SelectItem>
+                      <SelectItem value="Marketing & Social Media">Marketing & Social Media</SelectItem>
+                      <SelectItem value="Content Writing">Content Writing</SelectItem>
+                      <SelectItem value="HR">HR</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -129,13 +129,13 @@ export default function Chat() {
   const createRoom = async () => {
     if (!newRoom.name || !user) return;
 
-    const { error } = await supabase
-      .from('chat_rooms')
-      .insert({
-        name: newRoom.name,
-        department: newRoom.department || null,
-        participants: [...newRoom.participants, user.id]
-      });
+      const { error } = await supabase
+        .from('chat_rooms')
+        .insert({
+          name: newRoom.name,
+          department: (newRoom.department as any) || 'IT',
+          participants: [...newRoom.participants, user.id]
+        });
 
     if (error) {
       toast({ title: 'Error', description: 'Failed to create chat room', variant: 'destructive' });
@@ -217,11 +217,14 @@ export default function Chat() {
                       <SelectValue placeholder="Select department" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="organizing_committee">Organizing Committee</SelectItem>
-                      <SelectItem value="production">Production</SelectItem>
-                      <SelectItem value="marketing">Marketing</SelectItem>
-                      <SelectItem value="logistics">Logistics</SelectItem>
-                      <SelectItem value="speakers">Speakers</SelectItem>
+                      <SelectItem value="IT">IT</SelectItem>
+                      <SelectItem value="Organizing">Organizing</SelectItem>
+                      <SelectItem value="Graphic Design">Graphic Design</SelectItem>
+                      <SelectItem value="Public Relations">Public Relations</SelectItem>
+                      <SelectItem value="Treasury">Treasury</SelectItem>
+                      <SelectItem value="Marketing & Social Media">Marketing & Social Media</SelectItem>
+                      <SelectItem value="Content Writing">Content Writing</SelectItem>
+                      <SelectItem value="HR">HR</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

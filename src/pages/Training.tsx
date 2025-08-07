@@ -23,7 +23,7 @@ interface TrainingAssignment {
   department: string;
   assigned_to: string[];
   assigned_by: string;
-  attachments: any[];
+  attachments: any;
   created_at: string;
 }
 
@@ -34,7 +34,7 @@ interface TrainingSubmission {
   comments: string;
   submitted_by: string;
   submitted_at: string;
-  attachments: any[];
+  attachments: any;
 }
 
 export default function Training() {
@@ -97,16 +97,16 @@ export default function Training() {
   const createAssignment = async () => {
     if (!newAssignment.title || !user) return;
 
-    const { error } = await supabase
-      .from('training_assignments')
-      .insert({
-        title: newAssignment.title,
-        description: newAssignment.description,
-        department: newAssignment.department || null,
-        deadline: newAssignment.deadline?.toISOString() || null,
-        assigned_to: newAssignment.assigned_to,
-        assigned_by: user.id
-      });
+      const { error } = await supabase
+        .from('training_assignments')
+        .insert({
+          title: newAssignment.title,
+          description: newAssignment.description,
+          department: (newAssignment.department as any) || 'IT',
+          deadline: newAssignment.deadline?.toISOString() || null,
+          assigned_to: newAssignment.assigned_to,
+          assigned_by: user.id
+        });
 
     if (error) {
       toast({ title: 'Error', description: 'Failed to create training assignment', variant: 'destructive' });
@@ -195,11 +195,14 @@ export default function Training() {
                       <SelectValue placeholder="Select department" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="organizing_committee">Organizing Committee</SelectItem>
-                      <SelectItem value="production">Production</SelectItem>
-                      <SelectItem value="marketing">Marketing</SelectItem>
-                      <SelectItem value="logistics">Logistics</SelectItem>
-                      <SelectItem value="speakers">Speakers</SelectItem>
+                      <SelectItem value="IT">IT</SelectItem>
+                      <SelectItem value="Organizing">Organizing</SelectItem>
+                      <SelectItem value="Graphic Design">Graphic Design</SelectItem>
+                      <SelectItem value="Public Relations">Public Relations</SelectItem>
+                      <SelectItem value="Treasury">Treasury</SelectItem>
+                      <SelectItem value="Marketing & Social Media">Marketing & Social Media</SelectItem>
+                      <SelectItem value="Content Writing">Content Writing</SelectItem>
+                      <SelectItem value="HR">HR</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

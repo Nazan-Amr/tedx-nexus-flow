@@ -69,17 +69,17 @@ export default function Calendar() {
   const createEvent = async () => {
     if (!newEvent.title || !newEvent.start_time || !newEvent.end_time || !user) return;
 
-    const { error } = await supabase
-      .from('calendar_events')
-      .insert({
-        title: newEvent.title,
-        description: newEvent.description,
-        department: newEvent.department || null,
-        start_time: newEvent.start_time,
-        end_time: newEvent.end_time,
-        attendees: newEvent.attendees,
-        created_by: user.id
-      });
+      const { error } = await supabase
+        .from('calendar_events')
+        .insert({
+          title: newEvent.title,
+          description: newEvent.description,
+          start_time: newEvent.start_time,
+          end_time: newEvent.end_time,
+          attendees: newEvent.attendees,
+          created_by: user.id,
+          department: (newEvent.department as any) || 'IT'
+        });
 
     if (error) {
       toast({ title: 'Error', description: 'Failed to create event', variant: 'destructive' });

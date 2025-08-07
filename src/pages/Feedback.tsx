@@ -98,15 +98,14 @@ export default function Feedback() {
   const submitFeedback = async () => {
     if (!newFeedback.content || !user) return;
 
-    const { error } = await supabase
-      .from('feedback')
-      .insert({
-        title: newFeedback.title,
-        content: newFeedback.content,
-        type: newFeedback.type,
-        is_anonymous: newFeedback.is_anonymous,
-        submitted_by: newFeedback.is_anonymous ? null : user.id
-      });
+      const { error } = await supabase
+        .from('feedback')
+        .insert({
+          content: newFeedback.content,
+          type: newFeedback.type as 'high_board_session' | 'member_session' | 'general',
+          is_anonymous: newFeedback.is_anonymous,
+          submitted_by: newFeedback.is_anonymous ? null : user.id
+        });
 
     if (error) {
       toast({ title: 'Error', description: 'Failed to submit feedback', variant: 'destructive' });
@@ -219,9 +218,9 @@ export default function Feedback() {
                       <SelectValue placeholder="Select feedback type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="suggestion">Suggestion</SelectItem>
-                      <SelectItem value="complaint">Complaint</SelectItem>
-                      <SelectItem value="compliment">Compliment</SelectItem>
+                      <SelectItem value="high_board_session">High Board Session</SelectItem>
+                      <SelectItem value="member_session">Member Session</SelectItem>
+                      <SelectItem value="general">General</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
