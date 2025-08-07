@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useNavigate } from 'react-router-dom';
 import { 
   User, 
   Calendar, 
@@ -13,12 +14,17 @@ import {
   Settings,
   LogOut,
   Bell,
-  Plus
+  Plus,
+  BookOpen,
+  Lightbulb,
+  BarChart3,
+  Wrench
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 export default function Dashboard() {
   const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
 
   if (!profile) return null;
 
@@ -40,13 +46,15 @@ export default function Dashboard() {
   };
 
   const navigationItems = [
-    { icon: User, label: 'Profile', href: '/profile' },
-    { icon: Calendar, label: 'Calendar', href: '/calendar' },
-    { icon: MessageSquare, label: 'Communication', href: '/communication' },
-    { icon: FileText, label: 'Reports', href: '/reports', roles: ['management_board', 'high_board'] },
-    { icon: Target, label: 'Tasks', href: '/tasks' },
-    { icon: Award, label: 'Points & Badges', href: '/achievements' },
-    { icon: Settings, label: 'Tools', href: '/tools' },
+    { icon: Target, label: 'Tasks', href: '/tasks', description: 'Manage and track tasks' },
+    { icon: Calendar, label: 'Calendar', href: '/calendar', description: 'Schedule and view events' },
+    { icon: MessageSquare, label: 'Chat', href: '/chat', description: 'Team communication' },
+    { icon: FileText, label: 'Reports', href: '/reports', description: 'Submit progress reports', roles: ['management_board', 'high_board'] },
+    { icon: BookOpen, label: 'Training', href: '/training', description: 'Training assignments' },
+    { icon: Lightbulb, label: 'Innovation', href: '/innovation', description: 'Submit proposals' },
+    { icon: MessageSquare, label: 'Feedback', href: '/feedback', description: 'Share feedback' },
+    { icon: Wrench, label: 'Tools', href: '/tools', description: 'Access resources' },
+    { icon: BarChart3, label: 'Analytics', href: '/analytics', description: 'View insights', roles: ['management_board'] },
   ];
 
   const visibleNavItems = navigationItems.filter(item => 
@@ -152,12 +160,14 @@ export default function Dashboard() {
             <Card 
               key={item.label}
               className="tedx-card hover:shadow-lg tedx-transition cursor-pointer group"
+              onClick={() => navigate(item.href)}
             >
               <CardHeader className="text-center">
                 <div className="mx-auto w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 tedx-transition">
                   <item.icon className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle className="text-sm">{item.label}</CardTitle>
+                <CardDescription className="text-xs">{item.description}</CardDescription>
               </CardHeader>
             </Card>
           ))}
@@ -168,7 +178,11 @@ export default function Dashboard() {
           <div className="mt-8">
             <h3 className="text-xl font-semibold mb-4">Quick Actions</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <Button className="justify-start h-auto p-4" variant="outline">
+              <Button 
+                className="justify-start h-auto p-4" 
+                variant="outline"
+                onClick={() => navigate('/tasks')}
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 <div className="text-left">
                   <div className="font-medium">Create Task</div>
@@ -176,7 +190,11 @@ export default function Dashboard() {
                 </div>
               </Button>
               
-              <Button className="justify-start h-auto p-4" variant="outline">
+              <Button 
+                className="justify-start h-auto p-4" 
+                variant="outline"
+                onClick={() => navigate('/calendar')}
+              >
                 <Calendar className="h-4 w-4 mr-2" />
                 <div className="text-left">
                   <div className="font-medium">Schedule Event</div>
@@ -184,7 +202,11 @@ export default function Dashboard() {
                 </div>
               </Button>
               
-              <Button className="justify-start h-auto p-4" variant="outline">
+              <Button 
+                className="justify-start h-auto p-4" 
+                variant="outline"
+                onClick={() => navigate('/reports')}
+              >
                 <FileText className="h-4 w-4 mr-2" />
                 <div className="text-left">
                   <div className="font-medium">Submit Report</div>

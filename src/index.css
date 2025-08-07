@@ -136,9 +136,25 @@ All colors MUST be HSL.
   
   .tedx-card {
     box-shadow: var(--shadow-card);
+    transition: var(--transition-smooth);
+  }
+  
+  .tedx-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elegant);
   }
   
   .tedx-transition {
     transition: var(--transition-smooth);
+  }
+  
+  .success {
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+  }
+  
+  .warning {
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
   }
 }
