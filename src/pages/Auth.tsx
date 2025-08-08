@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
 
 export default function Auth() {
-  const { signIn, signUp, user } = useAuth();
+  const { signIn, signUp, user, resetPassword } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   
@@ -24,6 +24,7 @@ export default function Auth() {
     full_name: '',
     role: 'member' as 'management_board' | 'high_board' | 'member',
     department: '',
+    phone_number: '',
   });
 
   useEffect(() => {
@@ -88,6 +89,9 @@ export default function Auth() {
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? 'Signing in...' : 'Sign In'}
                 </Button>
+                <Button type="button" variant="link" className="w-full mt-1" onClick={() => resetPassword(signInData.email)}>
+                  Forgot Password?
+                </Button>
               </form>
             </TabsContent>
             
@@ -115,6 +119,16 @@ export default function Auth() {
                   />
                 </div>
                 <div>
+                  <Label htmlFor="signup-phone">Phone Number</Label>
+                  <Input
+                    id="signup-phone"
+                    type="tel"
+                    value={signUpData.phone_number}
+                    onChange={(e) => setSignUpData({ ...signUpData, phone_number: e.target.value })}
+                    placeholder="+20 1X XXX XXXX"
+                  />
+                </div>
+                <div>
                   <Label htmlFor="signup-password">Password</Label>
                   <Input
                     id="signup-password"
@@ -138,6 +152,26 @@ export default function Auth() {
                     </SelectContent>
                   </Select>
                 </div>
+                {(signUpData.role === 'member' || signUpData.role === 'high_board') && (
+                  <div>
+                    <Label>Department</Label>
+                    <Select value={signUpData.department} onValueChange={(value: any) => setSignUpData({ ...signUpData, department: value })}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select department" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="IT">IT</SelectItem>
+                        <SelectItem value="Organizing">Organizing</SelectItem>
+                        <SelectItem value="Graphic Design">Graphic Design</SelectItem>
+                        <SelectItem value="Public Relations">Public Relations</SelectItem>
+                        <SelectItem value="Treasury">Treasury</SelectItem>
+                        <SelectItem value="Marketing & Social Media">Marketing & Social Media</SelectItem>
+                        <SelectItem value="Content Writing">Content Writing</SelectItem>
+                        <SelectItem value="HR">HR</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? 'Creating account...' : 'Sign Up'}
                 </Button>

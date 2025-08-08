@@ -12,6 +12,8 @@ export interface Profile {
   department?: 'IT' | 'Organizing' | 'Graphic Design' | 'Public Relations' | 'Treasury' | 'Marketing & Social Media' | 'Content Writing' | 'HR';
   position?: string;
   avatar_url?: string;
+  phone_number?: string;
+  is_active?: boolean;
   points: number;
   created_at: string;
   updated_at: string;
@@ -83,6 +85,7 @@ export const useAuth = () => {
     full_name: string;
     role: 'management_board' | 'high_board' | 'member';
     department?: string;
+    phone_number?: string;
   }) => {
     try {
       const redirectUrl = `${window.location.origin}/`;
@@ -96,6 +99,7 @@ export const useAuth = () => {
             full_name: data.full_name,
             role: data.role,
             department: data.department,
+            phone_number: data.phone_number,
           }
         }
       });
@@ -201,6 +205,48 @@ export const useAuth = () => {
     }
   };
 
+  // Send approval email after first sign-in if account not active
+  useEffect(() => {
+    if (user && profile) {
+      if (profile.is_active === false) {
+        const key = `approval_sent:${user.id}`;
+        if (!localStorage.getItem(key)) {
+          supabase.functions.invoke('registration-approval', {
+            body: {
+              user_id: user.id,
+              full_name: profile.full_name,
+              email: profile.email,
+              role: profile.role,
+              department: profile.department,
+              phone_number: profile.phone_number,
+            }
+          }).then(() => {
+            localStorage.setItem(key, '1');
+            toast({ title: 'Registration pending approval', description: 'We notified management to review your account.' });
+          }).catch(() => {});
+        }
+      }
+    }
+  }, [user, profile]);
+
+  const deleteAccount = async () => {
+    try {
+      const { error } = await supabase.functions.invoke('user-admin', { body: { action: 'delete_user' } });
+      if (error) throw error;
+      await supabase.auth.signOut();
+      toast({ title: 'Account deleted' });
+      return { error: null };
+    } catch (error: any) {
+      console.error('Error in deleteAccount:', error);
+      toast({
+        title: 'Delete failed',
+        description: error.message || 'An error occurred',
+        variant: 'destructive',
+      });
+      return { error };
+    }
+  };
+
   return {
     user,
     session,
@@ -210,5 +256,6 @@ export const useAuth = () => {
     signIn,
     signOut,
     resetPassword,
+    deleteAccount,
   };
 };

@@ -33,6 +33,17 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
     );
   }
 
+  if (profile.is_active === false) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-2">Awaiting Approval</h2>
+          <p className="text-muted-foreground">Your registration is pending management approval. You will be notified by email once approved.</p>
+        </div>
+      </div>
+    );
+  }
+
   if (requiredRole && profile.role !== requiredRole) {
     return (
       <div className="min-h-screen flex items-center justify-center">

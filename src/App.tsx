@@ -17,6 +17,10 @@ import Innovation from "./pages/Innovation";
 import Feedback from "./pages/Feedback";
 import Tools from "./pages/Tools";
 import Analytics from "./pages/Analytics";
+import Profile from "./pages/Profile";
+import Users from "./pages/Users";
+import ResetPassword from "./pages/ResetPassword";
+import ProtectedLayout from "./components/layouts/ProtectedLayout";
 
 const queryClient = new QueryClient();
 
@@ -29,11 +33,15 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+
           <Route 
             path="/dashboard" 
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <ProtectedLayout>
+                  <Dashboard />
+                </ProtectedLayout>
               </ProtectedRoute>
             } 
           />
@@ -41,7 +49,9 @@ const App = () => (
             path="/tasks" 
             element={
               <ProtectedRoute>
-                <Tasks />
+                <ProtectedLayout>
+                  <Tasks />
+                </ProtectedLayout>
               </ProtectedRoute>
             } 
           />
@@ -49,7 +59,9 @@ const App = () => (
             path="/reports" 
             element={
               <ProtectedRoute>
-                <Reports />
+                <ProtectedLayout>
+                  <Reports />
+                </ProtectedLayout>
               </ProtectedRoute>
             } 
           />
@@ -57,7 +69,9 @@ const App = () => (
             path="/training" 
             element={
               <ProtectedRoute>
-                <Training />
+                <ProtectedLayout>
+                  <Training />
+                </ProtectedLayout>
               </ProtectedRoute>
             } 
           />
@@ -65,7 +79,9 @@ const App = () => (
             path="/calendar" 
             element={
               <ProtectedRoute>
-                <Calendar />
+                <ProtectedLayout>
+                  <Calendar />
+                </ProtectedLayout>
               </ProtectedRoute>
             } 
           />
@@ -73,7 +89,9 @@ const App = () => (
             path="/chat" 
             element={
               <ProtectedRoute>
-                <Chat />
+                <ProtectedLayout>
+                  <Chat />
+                </ProtectedLayout>
               </ProtectedRoute>
             } 
           />
@@ -81,7 +99,9 @@ const App = () => (
             path="/innovation" 
             element={
               <ProtectedRoute>
-                <Innovation />
+                <ProtectedLayout>
+                  <Innovation />
+                </ProtectedLayout>
               </ProtectedRoute>
             } 
           />
@@ -89,7 +109,9 @@ const App = () => (
             path="/feedback" 
             element={
               <ProtectedRoute>
-                <Feedback />
+                <ProtectedLayout>
+                  <Feedback />
+                </ProtectedLayout>
               </ProtectedRoute>
             } 
           />
@@ -97,7 +119,9 @@ const App = () => (
             path="/tools" 
             element={
               <ProtectedRoute>
-                <Tools />
+                <ProtectedLayout>
+                  <Tools />
+                </ProtectedLayout>
               </ProtectedRoute>
             } 
           />
@@ -105,10 +129,33 @@ const App = () => (
             path="/analytics" 
             element={
               <ProtectedRoute requiredRole="management_board">
-                <Analytics />
+                <ProtectedLayout>
+                  <Analytics />
+                </ProtectedLayout>
               </ProtectedRoute>
             } 
           />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <ProtectedLayout>
+                  <Profile />
+                </ProtectedLayout>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/users" 
+            element={
+              <ProtectedRoute>
+                <ProtectedLayout>
+                  <Users />
+                </ProtectedLayout>
+              </ProtectedRoute>
+            } 
+          />
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
