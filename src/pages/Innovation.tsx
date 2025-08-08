@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { NavigationHeader } from '@/components/NavigationHeader';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -134,12 +135,12 @@ export default function Innovation() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Innovation Proposals</h1>
-          <p className="text-muted-foreground">Submit and track innovative ideas for TEDx</p>
-        </div>
+    <div className="min-h-screen bg-background">
+      <NavigationHeader 
+        title="Innovation Proposals" 
+        description="Share and review innovative ideas"
+      />
+      <div className="container mx-auto p-6 space-y-6">
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button className="bg-primary hover:bg-primary/90">

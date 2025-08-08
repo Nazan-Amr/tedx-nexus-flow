@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { NavigationHeader } from '@/components/NavigationHeader';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -173,12 +174,12 @@ export default function Feedback() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Feedback & Reports</h1>
-          <p className="text-muted-foreground">Share feedback and submit anonymous reports</p>
-        </div>
+    <div className="min-h-screen bg-background">
+      <NavigationHeader 
+        title="Feedback Center" 
+        description="Provide feedback and suggestions"
+      />
+      <div className="container mx-auto p-6 space-y-6">
         <div className="flex gap-2">
           <Dialog open={isFeedbackOpen} onOpenChange={setIsFeedbackOpen}>
             <DialogTrigger asChild>

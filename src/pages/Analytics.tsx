@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { NavigationHeader } from '@/components/NavigationHeader';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -136,13 +137,13 @@ export default function Analytics() {
   const COLORS = ['#e11d48', '#dc2626', '#ea580c', '#d97706', '#ca8a04'];
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Analytics Dashboard</h1>
-        <p className="text-muted-foreground">Organizational insights and performance metrics</p>
-      </div>
-
-      {/* Key Metrics */}
+    <div className="min-h-screen bg-background">
+      <NavigationHeader 
+        title="Analytics Dashboard" 
+        description="Organization performance insights"
+      />
+      <div className="container mx-auto p-6 space-y-6">
+        {/* Key Metrics */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <Card className="border-border">
           <CardContent className="p-4">
@@ -353,6 +354,7 @@ export default function Analytics() {
             </div>
           </CardContent>
         </Card>
+      </div>
       </div>
     </div>
   );

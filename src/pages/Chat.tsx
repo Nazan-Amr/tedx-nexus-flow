@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { NavigationHeader } from '@/components/NavigationHeader';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -182,60 +183,60 @@ export default function Chat() {
   }
 
   return (
-    <div className="container mx-auto p-6 h-[calc(100vh-8rem)]">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Chat</h1>
-          <p className="text-muted-foreground">Team communication and collaboration</p>
-        </div>
+    <div className="min-h-screen bg-background">
+      <NavigationHeader 
+        title="Team Chat" 
+        description="Communicate with your team members"
+      />
+      <div className="container mx-auto p-6 h-[calc(100vh-12rem)]">
         {canCreateRooms && (
-          <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-primary hover:bg-primary/90">
-                <Plus className="w-4 h-4 mr-2" />
-                Create Room
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md">
-              <DialogHeader>
-                <DialogTitle>Create Chat Room</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="name">Room Name</Label>
-                  <Input
-                    id="name"
-                    value={newRoom.name}
-                    onChange={(e) => setNewRoom({ ...newRoom, name: e.target.value })}
-                    placeholder="Room name"
-                  />
+          <div className="mb-6">
+            <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-primary hover:bg-primary/90">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Room
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Create Chat Room</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="name">Room Name</Label>
+                    <Input
+                      id="name"
+                      value={newRoom.name}
+                      onChange={(e) => setNewRoom({ ...newRoom, name: e.target.value })}
+                      placeholder="Room name"
+                    />
+                  </div>
+                  <div>
+                    <Label>Department</Label>
+                    <Select value={newRoom.department} onValueChange={(value) => setNewRoom({ ...newRoom, department: value })}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select department" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="IT">IT</SelectItem>
+                        <SelectItem value="Organizing">Organizing</SelectItem>
+                        <SelectItem value="Graphic Design">Graphic Design</SelectItem>
+                        <SelectItem value="Public Relations">Public Relations</SelectItem>
+                        <SelectItem value="Treasury">Treasury</SelectItem>
+                        <SelectItem value="Marketing & Social Media">Marketing & Social Media</SelectItem>
+                        <SelectItem value="Content Writing">Content Writing</SelectItem>
+                        <SelectItem value="HR">HR</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button onClick={createRoom} className="w-full">Create Room</Button>
                 </div>
-                <div>
-                  <Label>Department</Label>
-                  <Select value={newRoom.department} onValueChange={(value) => setNewRoom({ ...newRoom, department: value })}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select department" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="IT">IT</SelectItem>
-                      <SelectItem value="Organizing">Organizing</SelectItem>
-                      <SelectItem value="Graphic Design">Graphic Design</SelectItem>
-                      <SelectItem value="Public Relations">Public Relations</SelectItem>
-                      <SelectItem value="Treasury">Treasury</SelectItem>
-                      <SelectItem value="Marketing & Social Media">Marketing & Social Media</SelectItem>
-                      <SelectItem value="Content Writing">Content Writing</SelectItem>
-                      <SelectItem value="HR">HR</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button onClick={createRoom} className="w-full">Create Room</Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+              </DialogContent>
+            </Dialog>
+          </div>
         )}
-      </div>
-
-      <div className="grid md:grid-cols-4 gap-6 h-full">
+        <div className="grid md:grid-cols-4 gap-6 h-full">
         <Card className="border-border">
           <CardHeader>
             <CardTitle className="text-foreground flex items-center gap-2">
@@ -327,6 +328,7 @@ export default function Chat() {
               </CardContent>
             </Card>
           )}
+        </div>
         </div>
       </div>
     </div>
