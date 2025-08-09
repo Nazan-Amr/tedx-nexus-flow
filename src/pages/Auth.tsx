@@ -89,7 +89,13 @@ export default function Auth() {
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? 'Signing in...' : 'Sign In'}
                 </Button>
-                <Button type="button" variant="link" className="w-full mt-1" onClick={() => resetPassword(signInData.email)}>
+                <Button
+                  type="button"
+                  variant="link"
+                  className="w-full mt-1"
+                  onClick={() => signInData.email && resetPassword(signInData.email)}
+                  disabled={!signInData.email}
+                >
                   Forgot Password?
                 </Button>
               </form>

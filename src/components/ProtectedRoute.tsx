@@ -1,14 +1,14 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-
+import { Button } from '@/components/ui/button';
 interface ProtectedRouteProps {
   children: ReactNode;
   requiredRole?: 'management_board' | 'high_board' | 'member';
 }
 
 export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
-  const { user, profile, loading } = useAuth();
+  const { user, profile, loading, signOut } = useAuth();
 
   if (loading) {
     return (
@@ -36,9 +36,17 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
   if (profile.is_active === false) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-xl font-semibold mb-2">Awaiting Approval</h2>
-          <p className="text-muted-foreground">Your registration is pending management approval. You will be notified by email once approved.</p>
+        <div className="text-center space-y-4">
+          <div>
+            <h2 className="text-xl font-semibold mb-2">Awaiting Approval</h2>
+            <p className="text-muted-foreground">Your registration is pending management approval. You will be notified by email once approved.</p>
+          </div>
+          <div className="flex items-center justify-center gap-3">
+            <Button onClick={() => window.location.reload()}>Refresh status</Button>
+            <Button variant="outline" onClick={async () => { await signOut(); window.location.href = '/auth'; }}>
+              Sign in with another account
+            </Button>
+          </div>
         </div>
       </div>
     );

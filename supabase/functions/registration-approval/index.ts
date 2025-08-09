@@ -88,7 +88,7 @@ serve(async (req) => {
         </p>
       `;
 
-      const mgmtEmail = "tedxsteamnewcairo@gmail.com";
+      const mgmtEmail = "tedxstemnewcairo@gmail.com";
 
       const res = await resend.emails.send({
         from: "TEDx System <onboarding@resend.dev>",
