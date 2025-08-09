@@ -52,6 +52,35 @@ serve(async (req) => {
       return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } });
     }
 
+    if (action === "delete_all_users") {
+      const isManager = callerProfile?.role === "management_board";
+      if (!isManager) {
+        return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } });
+      }
+
+      const { data: allProfiles, error: listError } = await supabase
+        .from("profiles")
+        .select("user_id")
+        .neq("user_id", callerId);
+
+      if (listError) {
+        return new Response(JSON.stringify({ error: listError.message }), { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } });
+      }
+
+      let deleted = 0;
+      for (const p of allProfiles ?? []) {
+        try {
+          await supabase.auth.admin.deleteUser((p as any).user_id);
+          await supabase.from("profiles").delete().eq("user_id", (p as any).user_id);
+          deleted++;
+        } catch (_) {
+          // continue on error for individual users
+        }
+      }
+
+      return new Response(JSON.stringify({ ok: true, deleted }), { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } });
+    }
+
     return new Response(JSON.stringify({ error: "Unsupported action" }), { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } });
   } catch (error) {
     console.error(error);

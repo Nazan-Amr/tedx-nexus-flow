@@ -29,10 +29,9 @@ export const useAuth = () => {
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        
         if (session?.user) {
           // Defer profile fetching to avoid deadlock
           setTimeout(() => {
@@ -66,14 +65,41 @@ export const useAuth = () => {
         .from('profiles')
         .select('*')
         .eq('user_id', userId)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error fetching profile:', error);
         return;
       }
 
-      setProfile(data);
+      if (!data) {
+        // Create a minimal profile if missing (handles legacy accounts)
+        const { data: userRes } = await supabase.auth.getUser();
+        const u = userRes?.user;
+        const meta: any = u?.user_metadata ?? {};
+        const insertPayload: any = {
+          user_id: userId,
+          email: u?.email ?? '',
+          full_name: meta.full_name || u?.email?.split('@')[0] || 'User',
+          role: 'member',
+          department: meta.department ?? null,
+          phone_number: meta.phone_number ?? null,
+        };
+        const { data: created, error: insertError } = await supabase
+          .from('profiles')
+          .insert(insertPayload)
+          .select('*')
+          .maybeSingle();
+
+        if (insertError) {
+          console.error('Error creating missing profile:', insertError);
+          return;
+        }
+        setProfile(created as any);
+        return;
+      }
+
+      setProfile(data as any);
     } catch (error) {
       console.error('Error in fetchProfile:', error);
     }

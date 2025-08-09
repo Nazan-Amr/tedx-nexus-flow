@@ -15,7 +15,7 @@ interface Row {
 }
 
 export default function Users() {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const { toast } = useToast();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,8 +46,28 @@ export default function Users() {
   return (
     <div className="p-6">
       <Card>
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Registered Users</CardTitle>
+          {profile?.role === 'management_board' && (
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={async () => {
+                if (!confirm('Delete ALL users except your own account? This cannot be undone.')) return;
+                const { data, error } = await supabase.functions.invoke('user-admin', { body: { action: 'delete_all_users' } });
+                if (error) {
+                  toast({ title: 'Bulk delete failed', description: error.message, variant: 'destructive' });
+                  return;
+                }
+                // Keep only the current user in the list
+                const me = (await supabase.auth.getUser()).data.user;
+                setRows((r) => r.filter((x) => x.user_id === me?.id));
+                toast({ title: `Deleted ${data?.deleted ?? 0} users` });
+              }}
+            >
+              Delete all (except me)
+            </Button>
+          )}
         </CardHeader>
         <CardContent>
           <Table>
@@ -69,7 +89,9 @@ export default function Users() {
                   <TableCell>{r.role}</TableCell>
                   {profile?.role === 'management_board' && (
                     <TableCell className="text-right">
-                      <Button variant="destructive" size="sm" onClick={() => removeUser(r.user_id)}>Delete</Button>
+                      {r.user_id !== user?.id && (
+                        <Button variant="destructive" size="sm" onClick={() => removeUser(r.user_id)}>Delete</Button>
+                      )}
                     </TableCell>
                   )}
                 </TableRow>
